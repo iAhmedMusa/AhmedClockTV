@@ -1,0 +1,832 @@
+/* ========================================
+   AhmedClock TV v2 - webOS TV App
+   Resolution: 1920x1080
+   ======================================== */
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+/* 
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1&family=Roboto:ital,wght@0,100..900;1,100..900&family=DM+Sans:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap"); */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  background: #b8a888;
+  font-family: "DM Sans", sans-serif;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ========================================
+   SPLASH SCREEN
+   ======================================== */
+#splash {
+  width: 1920px;
+  height: 1080px;
+  background: linear-gradient(145deg, #cdbfa5 0%, #b8a888 40%, #a89878 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  transition: opacity 0.8s ease;
+}
+
+.splash-content {
+  text-align: center;
+}
+
+.splash-clock-icon {
+  margin-bottom: 32px;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.9;
+  }
+}
+
+.splash-title {
+  font-family: "Playfair Display", serif;
+  font-size: 52px;
+  font-weight: 600;
+  color: #2a2520;
+  letter-spacing: 3px;
+  margin-bottom: 12px;
+}
+
+.splash-subtitle {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 26px;
+  font-weight: 400;
+  font-style: italic;
+  color: #5a4f42;
+  letter-spacing: 4px;
+  margin-bottom: 48px;
+}
+
+.splash-loader {
+  width: 200px;
+  height: 3px;
+  background: rgba(42, 37, 32, 0.15);
+  border-radius: 3px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.splash-loader-bar {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, #b0976e, #8a7a58);
+  border-radius: 3px;
+  animation: load 2.5s ease-in-out forwards;
+}
+
+@keyframes load {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+/* ========================================
+   TOP BAR (inspired by LG webOS Clock)
+   ======================================== */
+.top-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 48px;
+  z-index: 100;
+}
+
+.top-bar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.top-bar-brand {
+  font-family: "DM Sans", sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: 0.5px;
+}
+
+.top-bar-divider {
+  font-size: 22px;
+  color: rgba(255, 255, 255, 0.35);
+  font-weight: 300;
+}
+
+.top-bar-label {
+  font-family: "DM Sans", sans-serif;
+  font-size: 22px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.top-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.top-bar-time {
+  font-family: "DM Sans", sans-serif;
+  font-size: 56px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: 1px;
+}
+
+/* ========================================
+   MAIN LAYOUT
+   ======================================== */
+.main-layout {
+  width: 1920px;
+  height: 1080px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Warm beige wall background */
+  background:
+    radial-gradient(
+      ellipse at 40% 45%,
+      rgba(200, 185, 158, 0.4) 0%,
+      transparent 60%
+    ),
+    linear-gradient(180deg, #c0ad8e 0%, #b8a888 25%, #ae9e80 60%, #a09070 100%);
+  position: relative;
+}
+
+/* Subtle wall texture */
+.main-layout::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.006) 2px,
+      rgba(0, 0, 0, 0.006) 4px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 3px,
+      rgba(0, 0, 0, 0.004) 3px,
+      rgba(0, 0, 0, 0.004) 6px
+    );
+  pointer-events: none;
+}
+
+/* ========================================
+   CLOCK AREA
+   ======================================== */
+.clock-area {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+.clock-container {
+  position: relative;
+}
+
+/* Wall shadow behind clock */
+.clock-shadow {
+  position: absolute;
+  width: 870px;
+  height: 870px;
+  border-radius: 50%;
+  top: 14px;
+  left: 14px;
+  background: radial-gradient(
+    ellipse at 50% 50%,
+    rgba(0, 0, 0, 0.18) 0%,
+    rgba(0, 0, 0, 0.06) 50%,
+    transparent 70%
+  );
+  filter: blur(20px);
+}
+
+/* ========================================
+   CLOCK BODY & RIM — much larger now
+   Clock size: 860px to nearly fill 1080px height
+   ======================================== */
+.clock-body {
+  width: 860px;
+  height: 860px;
+  border-radius: 50%;
+  position: relative;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.25),
+    0 2px 8px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.clock-rim {
+  width: 860px;
+  height: 860px;
+  border-radius: 50%;
+  /* Refined gold rim — less saturated, more metallic */
+  background: linear-gradient(
+    145deg,
+    #c4aa78 0%,
+    #b0976e 15%,
+    #a08a5e 30%,
+    #b0976e 50%,
+    #c4aa78 65%,
+    #b0976e 80%,
+    #907a50 100%
+  );
+  padding: 24px;
+  position: relative;
+  box-shadow:
+    inset 0 2px 6px rgba(255, 255, 255, 0.3),
+    inset 0 -2px 6px rgba(0, 0, 0, 0.15),
+    0 0 0 2px rgba(140, 120, 70, 0.4);
+}
+
+/* Inner rim subtle ring */
+.clock-rim::before {
+  content: "";
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  pointer-events: none;
+}
+
+/* ========================================
+   CLOCK FACE
+   ======================================== */
+.clock-face {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at 45% 40%,
+    #ffffff 0%,
+    #fcfaf7 25%,
+    #f7f3ec 50%,
+    #f0ebe2 75%,
+    #e8e0d4 100%
+  );
+  position: relative;
+  box-shadow:
+    inset 0 3px 12px rgba(0, 0, 0, 0.07),
+    inset 0 0 30px rgba(0, 0, 0, 0.02);
+}
+
+/* Glass reflection */
+.clock-face::before {
+  content: "";
+  position: absolute;
+  top: 4%;
+  left: 14%;
+  width: 50%;
+  height: 38%;
+  border-radius: 50%;
+  background: linear-gradient(
+    160deg,
+    rgba(255, 255, 255, 0.18) 0%,
+    rgba(255, 255, 255, 0.05) 40%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 50;
+}
+
+/* ========================================
+   HOUR NUMBERS — larger for bigger clock
+   ======================================== */
+.hour-number {
+  position: absolute;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 52px;
+  color: #2a2520;
+  text-align: center;
+  width: 66px;
+  height: 66px;
+  line-height: 66px;
+  z-index: 10;
+  text-shadow:
+    0 1px 0 rgba(255,255,255,0.3),
+    0 2px 2px rgba(0,0,0,0.15);
+}
+
+/* Positions calculated for 812px face, radius 320px from center (406, 406), centered on 66x66px numbers */
+.hour-12 {
+  left: 370px;
+  top: 45px;
+}
+.hour-1 {
+  left: 535px;
+  top: 80px;
+}
+.hour-2 {
+  left: 670px;
+  top: 205px;
+}
+.hour-3 {
+  left: 720px;
+  top: 375px;
+}
+.hour-4 {
+  left: 670px;
+  top: 538px;
+}
+.hour-5 {
+  left: 545px;
+  top: 664px;
+}
+.hour-6 {
+  left: 370px;
+  top: 705px;
+}
+.hour-7 {
+  left: 200px;
+  top: 655px;
+}
+.hour-8 {
+  left: 75px;
+  top: 538px;
+}
+.hour-9 {
+  left: 32px;
+  top: 375px;
+}
+.hour-10 {
+  left: 90px;
+  top: 200px;
+}
+.hour-11 {
+  left: 215px;
+  top: 85px;
+}
+
+/* ========================================
+   NAME ON DIAL
+   ======================================== */
+.clock-name {
+  position: absolute;
+  top: 33%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 24px;
+  font-weight: 500;
+  font-style: italic;
+  color: #5a4f42;
+  letter-spacing: 3px;
+  white-space: nowrap;
+  z-index: 10;
+  text-shadow:
+    0 1px 0 rgba(255,255,255,0.4),
+    0 2px 0 rgba(0,0,0,0.1),
+    2px 3px 6px rgba(0,0,0,0.25);
+}
+
+/* ========================================
+   DIGITAL PANEL — moved much lower,
+   between 7 and 5 position, below hands
+   ======================================== */
+.digital-panel {
+  position: absolute;
+  bottom: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(180deg, #f5f2ed 0%, #e8e2d8 100%);
+  border: 2px solid #c0b8a8;
+  border-radius: 6px;
+  padding: 16px 40px;
+  min-width: 220px;
+  text-align: center;
+  z-index: 8;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.digital-date {
+  font-family: "DM Sans", sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #2a2520;
+  letter-spacing: 3px;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.digital-temp {
+  font-family: "DM Sans", sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  color: #5a5348;
+  letter-spacing: 1px;
+  line-height: 1.4;
+  margin-top: 6px;
+}
+
+/* ========================================
+   CLOCK HANDS — scaled for larger clock
+   ======================================== */
+.hand {
+  position: absolute;
+  bottom: 50%;
+  left: 50%;
+  transform-origin: bottom center;
+  z-index: 20;
+  will-change: transform;
+}
+
+/* Hour hand */
+.hour-hand {
+  width: 10px;
+  height: 200px;
+  margin-left: -5px;
+  background: linear-gradient(to top, #1a1714 0%, #2a2520 60%, #3a3530 100%);
+  border-radius: 5px 5px 3px 3px;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+}
+
+.hour-hand::before {
+  content: "";
+  position: absolute;
+  top: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 18px solid #2a2520;
+}
+
+.hour-hand::after {
+  content: "";
+  position: absolute;
+  bottom: -32px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 7px;
+  height: 32px;
+  background: #2a2520;
+  border-radius: 3px;
+}
+
+/* Minute hand */
+.minute-hand {
+  width: 7px;
+  height: 280px;
+  margin-left: -3.5px;
+  background: linear-gradient(to top, #1a1714 0%, #2a2520 50%, #3a3530 100%);
+  border-radius: 3.5px 3.5px 2px 2px;
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
+}
+
+.minute-hand::before {
+  content: "";
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 3.5px solid transparent;
+  border-right: 3.5px solid transparent;
+  border-bottom: 16px solid #2a2520;
+}
+
+.minute-hand::after {
+  content: "";
+  position: absolute;
+  bottom: -26px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 5px;
+  height: 26px;
+  background: #2a2520;
+  border-radius: 2px;
+}
+
+/* Second hand */
+.second-hand {
+  width: 2px;
+  height: 300px;
+  margin-left: -1px;
+  background: linear-gradient(to top, #b22222 0%, #cc3333 100%);
+  border-radius: 1px;
+  box-shadow: 0 0 3px rgba(178, 34, 34, 0.3);
+  transition: none;
+}
+
+.second-hand::after {
+  content: "";
+  position: absolute;
+  bottom: -44px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 44px;
+  background: #b22222;
+  border-radius: 2px;
+}
+
+.second-hand::before {
+  content: "";
+  position: absolute;
+  bottom: -52px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12px;
+  height: 12px;
+  background: #b22222;
+  border-radius: 50%;
+}
+
+/* ========================================
+   CENTER CAP
+   ======================================== */
+.center-cap {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #4a4540, #1a1714);
+  z-index: 30;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+.center-pin {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #b0976e, #8a7a58);
+  z-index: 31;
+}
+
+/* ========================================
+   WORLD CLOCK PANEL
+   ======================================== */
+.world-clock-panel {
+  position: absolute;
+  right: 48px;
+  bottom: 80px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.world-clock-card {
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 24px 130px;
+  text-align: center;
+  min-width: 200px;
+}
+
+.world-clock-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.world-clock-icon {
+  font-size: 18px;
+}
+
+.world-clock-title {
+  font-family: "Poppins", italic, serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.world-clock-city {
+  font-family: "Poppins", italic, serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+
+.world-clock-time {
+  font-family: "Poppins", italic, serif;
+  font-size: 48px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 2px;
+  line-height: 1.1;
+  margin-bottom: 4px;
+}
+
+.world-clock-offset {
+  font-family: "DM Sans", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 1px;
+  margin-bottom: 2px;
+}
+
+.world-clock-date {
+  font-family: "DM Sans", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 1.5px;
+  margin-bottom: 14px;
+}
+
+.world-clock-change {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  padding: 8px 20px;
+  font-family: "DM Sans", sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  transition:
+    background 0.2s,
+    border-color 0.2s;
+}
+
+.world-clock-change:hover,
+.world-clock-change:focus {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #fff;
+  outline: none;
+}
+
+/* ========================================
+   CITY SELECTOR
+   ======================================== */
+.city-selector {
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 20px 24px;
+  min-width: 200px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.city-selector-title {
+  font-family: "DM Sans", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.city-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s;
+  margin-bottom: 2px;
+}
+
+.city-option:hover,
+.city-option:focus,
+.city-option.selected {
+  background: rgba(255, 255, 255, 0.12);
+  outline: none;
+}
+
+.city-option-name {
+  font-family: "DM Sans", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.city-option-offset {
+  font-family: "DM Sans", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+/* ========================================
+   BACK BUTTON HINT
+   ======================================== */
+.back-hint {
+  position: absolute;
+  bottom: 28px;
+  left: 40px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+.back-arrow {
+  font-size: 22px;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1;
+}
+
+/* ========================================
+   ANIMATIONS
+   ======================================== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+#main:not(.hidden) {
+  animation: fadeIn 0.8s ease-out;
+}
+
+/* Scrollbar for city selector */
+.city-selector::-webkit-scrollbar {
+  width: 4px;
+}
+.city-selector::-webkit-scrollbar-track {
+  background: transparent;
+}
+.city-selector::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 2px;
+}

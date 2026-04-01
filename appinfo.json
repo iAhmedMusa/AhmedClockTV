@@ -1,0 +1,19 @@
+{
+  "id": "com.ahmedmusa.clock.ahmedclocktv",
+  "title": "AhmedClock TV v2",
+  "main": "index.html",
+  "icon": "icon.png",
+  "largeIcon": "largeIcon.png",
+  "type": "web",
+  "vendor": "Ahmed Musa",
+  "version": "2.0.0",
+  "appDescription": "Elegant analog wall clock with digital panel",
+  "resolution": "1920x1080",
+  "bgColor": "#d4c4a8",
+  "iconColor": "#c8a85c",
+  "splashBackground": "splash.png",
+  "transparent": false,
+  "disableBackHistoryAPI": false,
+  "handlesRelaunch": false,
+  "requiredMemory": 20
+}
